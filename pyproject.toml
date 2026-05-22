@@ -1,0 +1,10 @@
+[project]
+name = "mini-asyncio"
+version = "0.1.0"
+description = "A small implementation of asyncio module."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "black>=26.5.0",
+    "pylint>=4.0.5",
+]
