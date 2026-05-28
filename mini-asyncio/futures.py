@@ -9,8 +9,6 @@ CPython asyncio design note
 For Context Everything is insipired by the Cpython/lib/asyncio.
 """
 
-from ast import Call
-from tkinter import image_names
 from typing import Generic, Callable, Any, Generator, Literal
 import enum
 
@@ -77,13 +75,13 @@ class Future:
 
         self._exception = exc
         self._state = FutureState.FINISHED
-        self.schedule_callback()
+        self.schedule_callback
 
     def cancel(self) -> Literal[True]:
         if self._state is not FutureState.PENDING:
             raise InvalidStateError("Future either finshed or got cancelled")
         self._state = FutureState.CANCELLED
-        self._schedule_callback()
+        self.schedule_callback
         return True
 
     # Callback implemenatations
@@ -124,13 +122,9 @@ class Future:
 
 if __name__ == "__main__":
 
-    def on_done(future):
-        import time
-        f = Future()
-        result = f.set_result(232)
-        time.sleep(2)
-        print(f"set_result {future.result()}, {result}")
-    
+    def on_done(future): # I am expected to recieve a future object so i can wait on it and returnt the result
+        fut = Future()
+
     f = Future()
     on_done(f)
     f.add_done_callback(on_done)

@@ -1,3 +1,5 @@
+import asyncio
+
 from futures import Future
 
 
@@ -9,7 +11,8 @@ class Task(Future):
     def __init__(self, coro):
         super().__init__()
         self._coro = coro
-        self._step()  # call step immediately
+        self._running = False
+        self._done = False
 
     def _step(self):
         # Push coroutine one step forward
@@ -29,25 +32,18 @@ class Task(Future):
         except StopIteration as e:
             self.set_result(e.value)
 
-    def done(self):
-        pass
-
-    def cancel(self):
-        pass
-
-
-async def my_corob():
+async def c1():
     f = Future()
-    import threading, time
+    result = await f 
+    print(f"Result of Future: {result}")
+    return(f"StopIteraton of Task: {result.result()}")
 
-    threading.Thread(target=lambda: (time.sleep(0.3), f.set_result(99))).start()
-    result = await f
-    print(f"Coro got: {result}")
-    return "done"
+async def main():
+    t1 = c1
+   
+    task = Task(t1)
+    task.set_result("Hello kya chal rha hai")
+    task.add_done_callback(task._wakeup()) 
+    print(task.result())
 
-
-t = Task(my_corob())
-import time
-
-time.sleep(0.5)
-print(f"Task Result: {t.result()}")
+asyncio.run(main())
